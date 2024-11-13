@@ -1,0 +1,28 @@
+---
+- name: Run OpenVPN server
+  hosts: openvpn_servers
+  gather_facts: false
+  become: true
+  tasks:
+    - name: Check if OpenVPN service is running and active
+      ansible.builtin.systemd:
+        name: openvpn@server
+        state: started
+        enabled: yes
+      register: openvpn_service_status
+
+    - name: Fail if OpenVPN service is not running or is inactive
+      ansible.builtin.fail:
+        msg: "The OpenVPN service (openvpn@server) is not running"
+      when: openvpn_service_status.status.ActiveState != 'active'
+
+    - name: Check if tun0 interface exists
+      ansible.builtin.command: ip link show tun0
+      register: tun0_interface
+      failed_when: tun0_interface.rc != 0
+      changed_when: false
+
+    - name: Fail if tun0 interface is not created
+      ansible.builtin.fail:
+        msg: "The tun0 interface is not created."
+      when: tun0_interface.rc != 0

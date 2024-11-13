@@ -1,0 +1,9 @@
+---
+- name: Converge
+  hosts: ca-server
+  gather_facts: false
+  vars_files:
+    - ../../defaults/ca.yml
+    - ../../vars/ca.yml
+  tasks:
+    - import_tasks: ../../tasks/ca_server.yml

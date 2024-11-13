@@ -1,0 +1,5 @@
+openvpn_client_key_file_path: "{{ openvpn_client_files_dir }}/pki/private/client.key"
+openvpn_client_csr_file_path: "{{ openvpn_client_files_dir }}/pki/reqs/client.req"
+openvpn_client_cert_file_path: "{{ openvpn_client_files_dir }}/pki/client.crt"
+openvpn_ca_cert_for_client_path: "{{ openvpn_client_files_dir }}/pki/ca.crt"
+openvpn_hmac_file_for_client_path: "{{ openvpn_client_files_dir }}/pki/ta.key"

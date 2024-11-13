@@ -1,0 +1,30 @@
+port {{ openvpn_port }}
+proto udp
+dev tun
+user openvpn
+group openvpn
+cd {{ openvpn_dir_path }}
+persist-key
+persist-tun
+tls-server
+tls-timeout 120
+dh {{ openvpn_dh_file_path }}
+ca {{ openvpn_openvpn_ca_server_cert_file_path }}
+cert {{ openvpn_server_cert_file_path }}
+key {{ openvpn_server_key_file_path }}
+crl-verify {{ openvpn_crl_file_path }}
+tls-auth {{ openvpn_hmac_file_path }} 0
+server 10.15.0.0 255.255.255.0
+client-config-dir {{ openvpn_client_config_dir_path }}
+client-to-client
+topology subnet
+max-clients 5
+push "dhcp-option DNS 10.15.0.1"
+route 10.15.0.0 255.255.255.0
+comp-lzo
+keepalive 10 120
+status {{ openvpn_log_dir_path }}/openvpn-status.log 1
+status-version 3
+log-append {{ openvpn_log_dir_path }}/openvpn-server.log
+verb 3
+mute 20

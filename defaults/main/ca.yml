@@ -1,0 +1,2 @@
+openvpn_ca_server_host: ca-server
+openvpn_ca_dir_path: /usr/local/share/openvpn

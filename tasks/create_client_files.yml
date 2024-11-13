@@ -1,0 +1,66 @@
+- import_tasks: install_easyrsa.yml
+
+- name: Create client directory
+  file:
+    path: "{{ openvpn_client_files_dir }}"
+    state: directory
+    mode: '0755'
+
+- name: Remove client pki directory if it exists
+  ansible.builtin.file:
+    path: "{{ openvpn_client_files_dir }}/pki"
+    state: absent
+
+- name: Init PKI
+  shell:
+    chdir: "{{ openvpn_client_files_dir }}"
+    cmd: /usr/share/easy-rsa/easyrsa init-pki
+
+- name: Generate certificate signing request
+  shell:
+    chdir: "{{ openvpn_client_files_dir }}"
+    cmd: EASYRSA_BATCH=1 /usr/share/easy-rsa/easyrsa gen-req client nopass
+
+- name: Get CSR content
+  slurp:
+    src: "{{ openvpn_client_csr_file_path }}"
+  register: csr
+
+- name: Sign client OpenVPN certificates
+  delegate_to: "{{ openvpn_ca_server_host }}"
+  community.crypto.x509_certificate_pipe:
+    provider: ownca
+    csr_content: "{{ csr.content | b64decode }}"
+    ownca_path: "{{ openvpn_ca_server_cert_file_path }}"
+    ownca_privatekey_path: "{{ openvpn_ca_server_key_file_path }}"
+  register: cert
+
+- name: Write Certificate to file
+  copy:
+    content: "{{ cert.certificate }}"
+    dest: "{{ openvpn_client_cert_file_path }}"
+    mode: '0644'
+
+- name: Get CA certificate content
+  delegate_to: "{{ openvpn_ca_server_host }}"
+  slurp:
+    src: "{{ openvpn_ca_server_cert_file_path }}"
+  register: ca_cert_content
+
+- name: Write CA certificate to file
+  copy:
+    content: "{{ ca_cert_content.content | b64decode }}"
+    dest: "{{ openvpn_ca_cert_for_client_path }}"
+    mode: '0644'
+
+- name: Get HMAC content
+  delegate_to: "{{ openvpn_ca_server_host }}"
+  slurp:
+    src: "{{ openvpn_ca_server_hmac_file_path }}"
+  register: ca_ta_content
+
+- name: Write HMAC file to file
+  copy:
+    content: "{{ ca_ta_content.content | b64decode }}"
+    dest: "{{ openvpn_hmac_file_for_client_path }}"
+    mode: '0644'

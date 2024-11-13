@@ -1,0 +1,17 @@
+- name: Install packages
+  package:
+    name:
+      - easy-rsa
+      - openvpn
+    state: present
+    update_cache: yes
+  become: true
+
+- name: Add easy-rsa to PATH for all users
+  vars:
+    extra_path: /usr/share/easy-rsa
+  lineinfile:
+    path: /etc/environment
+    regexp: 'PATH=(["])((?!.*?{{ extra_path }}).*?)(["])$'
+    line: 'PATH=\1\2:{{ extra_path }}\3'
+    backrefs: yes

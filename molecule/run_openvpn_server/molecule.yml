@@ -1,0 +1,31 @@
+---
+dependency:
+  name: galaxy
+  options:
+    role-file: requirements.yml
+    collections-path: ~/.ansible/collections
+
+driver:
+  name: vagrant
+
+platforms:
+  - name: ca-server
+    box: ubuntu/focal64
+    instance_raw_config_args:
+      - "vm.network 'private_network', type: 'dhcp'"
+
+  - name: openvpn-server
+    box: ubuntu/focal64
+    groups:
+      - openvpn_servers
+    instance_raw_config_args:
+      - "vm.network 'private_network', type: 'dhcp'"
+
+scenario:
+  test_sequence:
+    - destroy
+    - create
+    - converge
+    - idempotence
+    - verify
+    - destroy

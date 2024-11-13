@@ -1,0 +1,16 @@
+---
+driver:
+  name: docker
+platforms:
+  - name: ca-server
+    image: nmusatti/ubuntu2004-pys-systemd
+    pre_build_image: true
+
+scenario:
+  test_sequence:
+    - destroy
+    - create
+    - converge
+    - idempotence
+    - verify
+    - destroy

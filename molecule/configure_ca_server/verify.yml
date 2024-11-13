@@ -1,0 +1,35 @@
+---
+- name: Verify generated CA files
+  hosts: ca-server
+  vars_files:
+    - ../../defaults/ca.yml
+    - ../../vars/ca.yml
+  tasks:
+    - name: Verify CA certificate exists
+      stat:
+        path: "{{ openvpn_ca_server_cert_file_path }}"
+      register: ca_cert_file_stat
+
+    - name: Verify CA private key exists
+      stat:
+        path: "{{ openvpn_ca_server_key_file_path }}"
+      register: ca_key_file_path
+
+    - name: Verify CRL file exists
+      stat:
+        path: "{{ openvpn_ca_server_crl_file_path }}"
+      register: crl_file_stat
+
+    - name: Verify HMAC key exists
+      stat:
+        path: "{{ openvpn_ca_server_hmac_file_path }}"
+      register: hmac_key_file_stat
+
+    - name: Assert all required files exist
+      assert:
+        that:
+          - ca_cert_file_stat.stat.exists
+          - ca_key_file_path.stat.exists
+          - crl_file_stat.stat.exists
+          - hmac_key_file_stat.stat.exists
+        fail_msg: "One or more required files are missing."

@@ -1,0 +1,11 @@
+- name: Get CRL content
+  delegate_to: "{{ openvpn_ca_server_host }}"
+  slurp:
+    src: "{{ openvpn_ca_server_crl_file_path }}"
+  register: crl
+
+- name: Write CRL to file
+  copy:
+    content: "{{ crl.content | b64decode }}"
+    dest: "{{ openvpn_crl_file_path }}"
+    mode: '0644'

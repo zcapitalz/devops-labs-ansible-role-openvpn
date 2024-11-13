@@ -1,0 +1,6 @@
+openvpn_port: 1194
+openvpn_dir_path: /etc/openvpn
+openvpn_log_dir_path: /var/log/openvpn
+openvpn_client_config_dir_path: /etc/openvpn/ccd
+openvpn_cert_common_name: example.com
+openvpn_cert_organization_name: Rizzy DevOps Inc.
