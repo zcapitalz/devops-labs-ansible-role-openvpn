@@ -2,8 +2,8 @@
 - name: Verify generated client OpenVPN files
   hosts: client-host
   vars_files:
-    - ../../defaults/client.yml
-    - ../../vars/client.yml
+    - "{{ playbook_dir }}/../../defaults/main/client.yml"
+    - "{{ playbook_dir }}/../../vars/main/client.yml"
   tasks:
     - name: Verify client key exists
       stat:

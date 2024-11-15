@@ -2,8 +2,8 @@
 - name: Verify generated CA files
   hosts: ca-server
   vars_files:
-    - ../../defaults/ca.yml
-    - ../../vars/ca.yml
+    - "{{ playbook_dir }}/../../defaults/main/ca.yml"
+    - "{{ playbook_dir }}/../../vars/main/ca.yml"
   tasks:
     - name: Verify CA certificate exists
       stat:

@@ -4,20 +4,20 @@
   become: true
   gather_facts: false
   vars_files:
-    - ../../defaults/ca.yml
-    - ../../vars/ca.yml
+    - "{{ playbook_dir }}/../../defaults/main/ca.yml"
+    - "{{ playbook_dir }}/../../vars/main/ca.yml"
   tasks:
-    - import_tasks: ./provision.yml
-    - import_tasks: ../../tasks/ca_server.yml
+    - import_tasks: "{{ playbook_dir }}/provision.yml"
+    - import_tasks: "{{ playbook_dir }}/../../tasks/ca_server.yml"
 
 - name: Run OpenVPN server
   hosts: openvpn_servers
   vars_files:
-    - ../../defaults/ca.yml
-    - ../../defaults/openvpn.yml
-    - ../../vars/ca.yml
-    - ../../vars/openvpn.yml
+    - "{{ playbook_dir }}/../../defaults/main/ca.yml"
+    - "{{ playbook_dir }}/../../defaults/main/openvpn.yml"
+    - "{{ playbook_dir }}/../../vars/main/ca.yml"
+    - "{{ playbook_dir }}/../../vars/main/openvpn.yml"
   become: true
   tasks:
-    - import_tasks: ./provision.yml
-    - import_tasks: ../../tasks/openvpn_server.yml
+    - import_tasks: "{{ playbook_dir }}/provision.yml"
+    - import_tasks: "{{ playbook_dir }}/../../tasks/openvpn_server.yml"

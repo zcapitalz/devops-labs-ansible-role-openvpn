@@ -4,18 +4,18 @@
   become: true
   gather_facts: false
   vars_files:
-    - ../../defaults/ca.yml
-    - ../../vars/ca.yml
+    - "{{ playbook_dir }}/../../defaults/main/ca.yml"
+    - "{{ playbook_dir }}/../../vars/main/ca.yml"
   tasks:
-    - import_tasks: ../../tasks/ca_server.yml
+    - import_tasks: "{{ playbook_dir }}/../../tasks/ca_server.yml"
 
 - name: Generate client files
   hosts: client-host
   vars_files:
-    - ../../defaults/ca.yml
-    - ../../vars/ca.yml
-    - ../../defaults/client.yml
-    - ../../vars/client.yml
+    - "{{ playbook_dir }}/../../defaults/main/ca.yml"
+    - "{{ playbook_dir }}/../../vars/main/ca.yml"
+    - "{{ playbook_dir }}/../../defaults/main/client.yml"
+    - "{{ playbook_dir }}/../../vars/main/client.yml"
   become: true
   tasks:
-    - import_tasks: ../../tasks/create_client_files.yml
+    - import_tasks: "{{ playbook_dir }}/../../tasks/create_client_files.yml"

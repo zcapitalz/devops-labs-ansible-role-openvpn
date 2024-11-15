@@ -3,7 +3,7 @@
   hosts: ca-server
   gather_facts: false
   vars_files:
-    - ../../defaults/ca.yml
-    - ../../vars/ca.yml
+    - "{{ playbook_dir }}/../../defaults/main/ca.yml"
+    - "{{ playbook_dir }}/../../vars/main/ca.yml"
   tasks:
-    - import_tasks: ../../tasks/ca_server.yml
+    - import_tasks: "{{ playbook_dir }}/../../tasks/ca_server.yml"
